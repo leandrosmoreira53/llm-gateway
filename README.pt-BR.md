@@ -89,6 +89,18 @@ Python 3.12 · FastAPI · Pydantic v2 · httpx (async) · PostgreSQL + SQLAlchem
 Prometheus · Grafana · OpenTelemetry (convenções GenAI) · Docker Compose · GitHub Actions · pytest + respx ·
 k6 · ruff · mypy · pre-commit · uv
 
+## Desenvolvimento
+
+Requer o [uv](https://docs.astral.sh/uv/).
+
+```bash
+uv sync                      # instala as dependências (Python 3.12)
+cp .env.example .env         # preencha as chaves; o .env nunca vai para o git
+uv run pytest                # testes offline (APIs pagas são simuladas)
+uv run ruff check . && uv run mypy
+uv run pre-commit install    # roda as checagens a cada commit
+```
+
 ## Documentação
 
 | Documento | Conteúdo |
