@@ -1,0 +1,16 @@
+{
+  "_note": "Synthetic sample shaped like OpenRouter's documented response. Replace with a recorded live response once an API key is available.",
+  "id": "gen-1760000000-abc123",
+  "provider": "Anthropic",
+  "model": "anthropic/claude-haiku-5.5",
+  "object": "chat.completion",
+  "created": 1760000000,
+  "choices": [
+    {
+      "index": 0,
+      "finish_reason": "stop",
+      "message": {"role": "assistant", "content": "Aumente o wedge para deixar o carro mais preso."}
+    }
+  ],
+  "usage": {"prompt_tokens": 120, "completion_tokens": 30, "total_tokens": 150, "cost": 0.000315}
+}
