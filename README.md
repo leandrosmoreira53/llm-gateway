@@ -48,7 +48,7 @@ A gateway that sits between applications and models:
 |---|---|
 | **Proven savings** | Every release publishes a "router vs. single model" table with accuracy, cost per correct answer and latency, measured on a held-out, frozen test set. |
 | **Validated ladder** | Cheap model first; escalate to the expensive one only when an objective check fails. |
-| **Real-domain benchmark** | Race-engineering questions (NASCAR in iRacing) with an answer key reviewed by a setup engineer. |
+| **Real-domain benchmark** | 58 race-engineering questions (NASCAR Next Gen in iRacing), including trick questions and questions with no answer in the sources. The answer key was drafted with AI and reviewed by the author; review by a setup engineer is pending and will be reported when done. |
 | **Jev beyond the hype** | Jev rates question difficulty and picks the ladder's starting step. It plugs in as an alternative policy, with a timeout that falls back to the rule and its own cost added to each call. It becomes the main policy only if it wins on the test set. |
 | **Market baseline in the table** | OpenRouter's Auto Router (`openrouter/auto`) is measured on the same set. |
 | **Honest numbers** | The README also reports what lost, confidence intervals and the limits of the measurement. |

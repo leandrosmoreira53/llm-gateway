@@ -4,8 +4,11 @@ O benchmark é o produto principal: toda afirmação de economia no README vem d
 
 ## Conjunto de dados
 
-- **Fonte:** gabarito do iRacingEng, com 58 perguntas de engenharia de corrida (NASCAR no iRacing) e respostas
-  revisadas por engenheiro de setup.
+- **Fonte:** gabarito do iRacingEng (`data/rag/gabarito-v0.jsonl`), com 58 perguntas de engenharia de corrida
+  (NASCAR Next Gen no iRacing).
+- **Revisão:** respostas escritas com IA e revisadas pelo autor. A revisão por engenheiro de setup está
+  **pendente**; cada tabela publicada informa quantas perguntas do conjunto de teste já foram revisadas por ele
+  (campo `revisao.engenheiro`).
 - **Privacidade:** o conjunto real tem trechos de manuais (direito autoral) e conhecimento da equipe. Ele fica
   **fora do git** e é lido de `BENCH_DATASET_PATH`. O repositório tem só o formato e um conjunto público de exemplo.
 - **Divisão:** 29 perguntas de **ajuste** e 29 de **teste**, sorteadas com semente fixa. Os IDs da divisão são
