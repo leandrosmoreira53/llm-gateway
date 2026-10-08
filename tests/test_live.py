@@ -1,4 +1,4 @@
-"""Real paid calls. Never run in CI; run manually with `uv run pytest -m live` after confirming cost.
+"""Real paid calls. Never run in CI; run manually with `uv run pytest -m live`, after a cost check.
 
 Requires OPENROUTER_API_KEY and LIVE_TEST_MODEL (an OpenRouter model slug) in the environment.
 """
