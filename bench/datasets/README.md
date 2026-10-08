@@ -29,6 +29,9 @@ repositório (sem trechos de manuais). Serve para rodar o pipeline sem o gabarit
 uv run python -m bench.split --dataset "$BENCH_DATASET_PATH" --out bench/datasets/split.json
 ```
 
-- Semente fixa (`20261012`); metade arredondada para baixo vai para ajuste, o resto para teste.
+- Semente fixa (`20261012`), **estratificada por categoria**: metade de cada categoria vai para ajuste e
+  metade para teste. Categorias ímpares alternam qual lado recebe a pergunta extra (58 → 29/29).
 - O arquivo guarda o SHA-256 do gabarito. Se o gabarito mudar, o carregamento da divisão falha de propósito.
 - Uma divisão existente não é sobrescrita: ela é congelada.
+- Se o gabarito for corrigido (ex.: revisão do engenheiro) sem mudar os IDs, registre a nova assinatura com
+  `--update-fingerprint`. A mudança fica visível no histórico do git.

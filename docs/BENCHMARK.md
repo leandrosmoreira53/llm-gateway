@@ -8,8 +8,8 @@ O benchmark é o produto principal: toda afirmação de economia no README vem d
   revisadas por engenheiro de setup.
 - **Privacidade:** o conjunto real tem trechos de manuais (direito autoral) e conhecimento da equipe. Ele fica
   **fora do git** e é lido de `BENCH_DATASET_PATH`. O repositório tem só o formato e um conjunto público de exemplo.
-- **Divisão:** 29 perguntas de **ajuste** e 29 de **teste**, sorteadas com semente fixa. Os IDs da divisão são
-  versionados e não mudam.
+- **Divisão:** 29 perguntas de **ajuste** e 29 de **teste**, sorteadas com semente fixa e **estratificadas por
+  categoria** (cada categoria dividida ao meio). Os IDs da divisão são versionados e não mudam.
 
 ## Regras de medição
 
