@@ -1,0 +1,28 @@
+# Segredos
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
+.coverage
+htmlcov/
+dist/
+build/
+*.egg-info/
+
+# Benchmark: gabarito e respostas brutas ficam fora do git
+bench/data/
+bench/raw/
+*.har
+
+# Ferramentas
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
