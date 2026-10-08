@@ -25,7 +25,7 @@ IDs: `GW-<sprint>.<n>`.
 | GW-0.1 | Plano, roadmap, sprints, arquitetura, infra, benchmark e ADRs |
 | GW-0.2 | Criar o repositório `llm-gateway` no GitHub e dar acesso (Leandro) |
 | GW-0.3 | Licença: **MIT** (decidido em 07/10) |
-| GW-0.4 | README em inglês (`README.en.md`) |
+| GW-0.4 | README em inglês como padrão (`README.md`); versão em português em `README.pt-BR.md` |
 
 **Aceite:** documentação revisada e aprovada; repositório criado.
 

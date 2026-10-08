@@ -1,108 +1,109 @@
 # llm-gateway
 
-**Português** · [English](README.en.md)
+**English** · [Português](README.pt-BR.md)
 
-> Gateway de LLM compatível com a API da OpenAI que escolhe o modelo pelo **custo por resposta correta**
-> e publica, com benchmark reproduzível, quanto economiza (e onde não economiza).
-> Inclui o **Jev** como política de rota plugável, medido lado a lado com a regra no mesmo conjunto de teste.
+> An OpenAI-compatible LLM gateway that picks the model with the lowest **cost per correct answer**,
+> and publishes a reproducible benchmark showing how much it saves (and where it doesn't).
+> Includes **Jev** as a pluggable routing policy, measured head-to-head against the rule on the same test set.
 
-**Status:** planejamento concluído · Sprint 0 · próxima entrega: `v0.1.0` (benchmark), fim de 25/10/2026.
+**Status:** planning complete · Sprint 0 · next release: `v0.1.0` (benchmark), due 2026-10-25.
 
 ---
 
-## O problema
+## The problem
 
-Aplicações com LLM costumam fixar um modelo caro para todas as chamadas. Boa parte das perguntas seria
-respondida corretamente por um modelo várias vezes mais barato, mas trocar de modelo "no feeling" arrisca a
-qualidade e ninguém mede o resultado.
+LLM applications usually pin one expensive model for every call. Many requests would be answered correctly by
+a model several times cheaper, but switching models on gut feeling puts quality at risk, and nobody measures
+the outcome.
 
-## A solução
+## The solution
 
-Um gateway que fica entre as aplicações e os modelos:
+A gateway that sits between applications and models:
 
-1. Recebe pedidos no formato da API da OpenAI. Qualquer cliente troca só o endereço base.
-2. Descarta modelos que não atendem o pedido (contexto, visão, ferramentas, JSON).
-3. Escolhe o modelo de menor **custo esperado por resposta correta**.
-4. Chama o modelo via OpenRouter, com modelos reserva e escolha do provedor mais barato/rápido.
-5. Confere a resposta com checagens objetivas. Se falhar, sobe um degrau na escada (modelo mais forte).
-6. Registra tudo: modelo, provedor, tokens, custo, latência, checagens, degrau e **por que** a rota foi escolhida.
+1. Accepts requests in the OpenAI API format. Any client only changes its base URL.
+2. Drops models that can't serve the request (context window, vision, tools, JSON mode).
+3. Picks the model with the lowest **expected cost per correct answer**.
+4. Calls it through OpenRouter, with fallback models and cheapest/fastest provider selection.
+5. Checks the answer with objective validators. If a check fails, it climbs one step up the ladder (stronger model).
+6. Logs everything: model, provider, tokens, cost, latency, checks, ladder step, and **why** the route was chosen.
 
 ```
  Apps (iRacingEng, ...) ──► POST /v1/chat/completions  (model: "auto-engenheiro")
                                   │
             ┌──────────────── llm-gateway ────────────────┐
-            │ auth + orçamento + rate limit               │
-            │ filtro de capacidade                        │
-            │ política de rota (regra │ Jev │ aprendida)  │
-            │ cache exato                                 │
-            │ escada com checagem ──► sobe se falhar      │
-            │ registro auditável (Postgres)               │
+            │ auth + budget + rate limit                  │
+            │ capability filter                           │
+            │ routing policy (rule │ Jev │ learned)       │
+            │ exact cache                                 │
+            │ validated ladder ──► escalate on failure    │
+            │ auditable log (Postgres)                    │
             └──────────────────┬──────────────────────────┘
                                ▼
                           OpenRouter ──► Claude · GPT · Gemini · DeepSeek · ...
 ```
 
-## Diferenciais
+## Highlights
 
 | | |
 |---|---|
-| **Prova que economiza** | Cada versão publica a tabela "router vs modelo único" com acerto, custo por resposta correta e latência, medida num conjunto de teste separado e congelado. |
-| **Escada com checagem** | Modelo barato primeiro; sobe para o caro só quando uma checagem objetiva falha. |
-| **Benchmark de domínio real** | Perguntas de engenharia de corrida (NASCAR no iRacing) com gabarito revisado por engenheiro de setup. |
-| **Jev fora do hype, dentro do projeto** | O Jev classifica a dificuldade da pergunta e escolhe o degrau inicial da escada. Entra como política plugável, com tempo-limite e volta para a regra se não responder, e com o próprio custo somado ao da chamada. Só vira a política principal se ganhar no conjunto de teste. |
-| **Concorrente de mercado na tabela** | O Auto Router do OpenRouter (`openrouter/auto`) é medido no mesmo conjunto. |
-| **Números honestos** | O README mostra também o que perdeu, intervalos de confiança e limites da medida. |
-| **Decisão auditável** | Toda chamada grava o modelo escolhido, os descartados e o motivo. |
+| **Proven savings** | Every release publishes a "router vs. single model" table with accuracy, cost per correct answer and latency, measured on a held-out, frozen test set. |
+| **Validated ladder** | Cheap model first; escalate to the expensive one only when an objective check fails. |
+| **Real-domain benchmark** | Race-engineering questions (NASCAR in iRacing) with an answer key reviewed by a setup engineer. |
+| **Jev beyond the hype** | Jev rates question difficulty and picks the ladder's starting step. It plugs in as an alternative policy, with a timeout that falls back to the rule and its own cost added to each call. It becomes the main policy only if it wins on the test set. |
+| **Market baseline in the table** | OpenRouter's Auto Router (`openrouter/auto`) is measured on the same set. |
+| **Honest numbers** | The README also reports what lost, confidence intervals and the limits of the measurement. |
+| **Auditable decisions** | Every call records the chosen model, the rejected ones and the reason. |
 
-## Jev: medido, não promovido
+## Jev: measured, not promoted
 
-O Jev está em alta. Aqui ele não é tratado como cérebro do gateway, e sim como mais um candidato que precisa
-provar valor com números:
+Jev is getting a lot of attention. Here it is not the gateway's brain, just another candidate that has to prove
+its value with numbers:
 
-- **Primeiro resultado já na `v0.1.0`** (simulação sobre as respostas gravadas); integração ao vivo na V2.
-- **Mesmo teste, mesma regra de decisão:** escada com Jev × escada com regra × Sonnet sozinho, no conjunto de
-  teste congelado.
-- **Custo completo:** o que se paga ao Jev entra no custo por resposta correta.
-- **Sem dependência cega:** se o Jev não responder no tempo-limite, a regra assume, e o gateway não para.
-- **Resultado publicado em qualquer caso**, inclusive se o Jev perder.
+- **First result in `v0.1.0`** (simulated on recorded answers); live integration in V2.
+- **Same test, same decision rule:** ladder with Jev vs. ladder with the rule vs. Sonnet alone, on the frozen test set.
+- **Full cost:** what Jev charges is included in the cost per correct answer.
+- **No blind dependency:** if Jev doesn't answer within the timeout, the rule takes over and the gateway keeps running.
+- **Result published either way**, including if Jev loses.
 
-Detalhes da decisão em [docs/adr/0004-jev-como-politica-plugavel.md](docs/adr/0004-jev-como-politica-plugavel.md).
+Decision record (Portuguese): [docs/adr/0004-jev-como-politica-plugavel.md](docs/adr/0004-jev-como-politica-plugavel.md).
 
-## Resultados
+## Results
 
-> Publicados a partir da `v0.1.0`. Metodologia em [docs/BENCHMARK.md](docs/BENCHMARK.md).
+> Published starting at `v0.1.0`. Methodology (Portuguese): [docs/BENCHMARK.md](docs/BENCHMARK.md).
 
-| Alvo | Acerto | Custo por pergunta | Custo por resposta correta | Latência p50 / p95 |
+| Target | Accuracy | Cost per question | Cost per correct answer | Latency p50 / p95 |
 |---|---|---|---|---|
-| Sonnet 5.5 sozinho | — | — | — | — |
-| Modelo mais barato sozinho | — | — | — | — |
-| Melhor modelo único | — | — | — | — |
+| Sonnet 5.5 alone | — | — | — | — |
+| Cheapest model alone | — | — | — | — |
+| Best single model | — | — | — | — |
 | OpenRouter Auto (`openrouter/auto`) | — | — | — | — |
-| Escada com regra | — | — | — | — |
-| Escada com Jev | — | — | — | — |
-| Router aprendido | — | — | — | — |
-| Oráculo (limite teórico) | — | — | — | — |
+| Ladder with rule | — | — | — | — |
+| Ladder with Jev | — | — | — | — |
+| Learned router | — | — | — | — |
+| Oracle (theoretical bound) | — | — | — | — |
 
 ## Stack
 
 Python 3.12 · FastAPI · Pydantic v2 · httpx (async) · PostgreSQL + SQLAlchemy 2 + Alembic · pgvector · Redis ·
-Prometheus · Grafana · OpenTelemetry (convenções GenAI) · Docker Compose · GitHub Actions · pytest + respx ·
-k6 · ruff · mypy · pre-commit · uv
+Prometheus · Grafana · OpenTelemetry (GenAI semantic conventions) · Docker Compose · GitHub Actions ·
+pytest + respx · k6 · ruff · mypy · pre-commit · uv
 
-## Documentação
+## Documentation
 
-| Documento | Conteúdo |
+Detailed documents are in Portuguese.
+
+| Document | Contents |
 |---|---|
-| [docs/PLANO.md](docs/PLANO.md) | Plano do produto (fonte da verdade do escopo) |
-| [docs/ROADMAP.md](docs/ROADMAP.md) | Fases, releases, marcos, riscos e métricas de sucesso |
-| [docs/SPRINTS.md](docs/SPRINTS.md) | Backlog por sprint com critérios de aceite |
-| [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | Componentes, fluxo da requisição, modelo de dados, falhas |
-| [docs/INFRA.md](docs/INFRA.md) | Ambientes, containers, VPS, CI/CD, segredos, backup |
-| [docs/BENCHMARK.md](docs/BENCHMARK.md) | Metodologia de avaliação |
-| [docs/adr/](docs/adr/) | Registro das decisões de arquitetura |
-| [SECURITY.md](SECURITY.md) | Política de segurança e dados |
-| [CHANGELOG.md](CHANGELOG.md) | Histórico de versões |
+| [docs/PLANO.md](docs/PLANO.md) | Product plan (source of truth for scope) |
+| [docs/ROADMAP.md](docs/ROADMAP.md) | Phases, releases, milestones, risks and success metrics |
+| [docs/SPRINTS.md](docs/SPRINTS.md) | Sprint backlog with acceptance criteria |
+| [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | Components, request flow, data model, failure modes |
+| [docs/INFRA.md](docs/INFRA.md) | Environments, containers, VPS, CI/CD, secrets, backups |
+| [docs/BENCHMARK.md](docs/BENCHMARK.md) | Evaluation methodology |
+| [docs/adr/](docs/adr/) | Architecture decision records |
+| [SECURITY.md](SECURITY.md) | Security and data policy |
+| [CHANGELOG.md](CHANGELOG.md) | Release history |
 
-## Licença
+## License
 
 [MIT](LICENSE)

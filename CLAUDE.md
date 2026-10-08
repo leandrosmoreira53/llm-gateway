@@ -25,7 +25,8 @@ Este arquivo vale para este projeto e tem prioridade sobre qualquer `CLAUDE.md` 
 ## Convenções
 
 - Python 3.12, `uv`, layout `src/gateway/`, tipagem completa (`mypy --strict`), `ruff`.
-- Código, nomes e mensagens de commit em inglês; documentação em português.
+- Código, nomes e mensagens de commit em inglês. `README.md` em inglês (padrão do GitHub), espelhado em
+  `README.pt-BR.md`: toda mudança vale para os dois. Demais documentos em português.
 - Commits no padrão Conventional Commits (`feat:`, `fix:`, `docs:`, `test:`, `chore:`).
 - Uma branch e um PR por tarefa `GW-x.y`; o PR cita o ID.
 - Erros da API sempre no formato da OpenAI; nunca stack trace para o cliente.
