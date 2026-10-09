@@ -107,3 +107,23 @@ def test_split_needs_two_questions(tmp_path: Path) -> None:
     questions = load_dataset(write_jsonl(tmp_path / "d.jsonl", [row(1)]))
     with pytest.raises(SplitError):
         make_split(questions, seed=DEFAULT_SEED, dataset_sha256="x")
+
+
+def test_split_is_stratified_by_category(tmp_path: Path) -> None:
+    sizes = {"comum": 15, "termo_exato": 10, "sem_resposta": 5, "extra": 8}
+    rows = []
+    i = 0
+    for category, n in sizes.items():
+        for _ in range(n):
+            i += 1
+            rows.append(row(i, category=category))
+    questions = load_dataset(write_jsonl(tmp_path / "d.jsonl", rows))
+    category_of = {q.id: q.category for q in questions}
+
+    split = make_split(questions, seed=DEFAULT_SEED, dataset_sha256="x")
+
+    assert len(split.tune) + len(split.test) == 38
+    assert abs(len(split.tune) - len(split.test)) <= 1
+    for category, n in sizes.items():
+        in_tune = sum(category_of[i] == category for i in split.tune)
+        assert in_tune in (n // 2, n - n // 2), category

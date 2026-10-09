@@ -16,12 +16,21 @@ class Question(BaseModel):
     id: str = Field(min_length=1, pattern=r"^[A-Za-z0-9_.-]+$")
     question: str = Field(min_length=1)
     expected_answer: str = Field(min_length=1)
+    question_en: str | None = None
     # Optional extra context sent with the question (car, track, setup values...).
     context: str | None = None
+    # True when the sources hold no answer: the correct reply is to say so, not to guess.
+    no_answer: bool = False
     citation_required: bool = False
     # Sources the answer should cite when citation_required is true.
     expected_sources: list[str] = Field(default_factory=list)
+    # Gold excerpts behind the expected answer. Private: never written to the repo or results.
+    source_passages: list[str] = Field(default_factory=list, repr=False)
+    # Known pitfall the judge should check for (e.g. confusing car series).
+    trap: str | None = None
+    filters: dict[str, str] = Field(default_factory=dict)
     category: str | None = None
+    engineer_reviewed: bool = False
 
 
 class DatasetError(ValueError):
@@ -29,7 +38,12 @@ class DatasetError(ValueError):
 
 
 def load_dataset(path: Path) -> list[Question]:
-    """Load and validate a JSONL dataset. Errors name the line, never echo its content."""
+    """Load and validate a JSONL dataset. Errors name the line, never echo its content.
+
+    Accepts the native format (see bench/datasets/README.md) and iRacingEng's answer-key format.
+    """
+    from bench.formats import from_iracingeng, is_iracingeng_row
+
     if not path.is_file():
         raise DatasetError(f"Dataset file not found: {path}")
     questions: list[Question] = []
@@ -39,7 +53,13 @@ def load_dataset(path: Path) -> list[Question]:
             if not line.strip():
                 continue
             try:
-                question = Question.model_validate(json.loads(line))
+                raw = json.loads(line)
+                if not isinstance(raw, dict):
+                    raise DatasetError(f"{path.name}:{line_no}: expected a JSON object")
+                if is_iracingeng_row(raw):
+                    question = from_iracingeng(raw)
+                else:
+                    question = Question.model_validate(raw)
             except json.JSONDecodeError as exc:
                 raise DatasetError(f"{path.name}:{line_no}: invalid JSON ({exc.msg})") from exc
             except ValidationError as exc:
