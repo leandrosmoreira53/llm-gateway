@@ -40,8 +40,9 @@ trocando o endereço. Não amarra a nenhum fornecedor.
 1. **Prova que economiza:** cada versão publica a tabela "router vs um modelo só" com acerto, custo por
    resposta correta e latência, medida num conjunto de teste real e separado.
 2. **Escada com checagem:** modelo barato primeiro; checagem objetiva; só sobe para o caro se falhar.
-3. **Benchmark de domínio real:** perguntas de engenharia de corrida (NASCAR no iRacing) com gabarito
-   revisado por engenheiro de setup, não só perguntas genéricas.
+3. **Benchmark de domínio real:** perguntas de engenharia de corrida (NASCAR no iRacing), não só perguntas
+   genéricas. Gabarito escrito com IA e revisado pelo autor; revisão por engenheiro de setup pendente
+   (decisão de 2026-10-08: publicar assim, informando o status).
 4. **Números honestos:** o README mostra também o que não funcionou e os limites da medida.
 5. **Decisão auditável:** toda rota grava por que aquele modelo foi escolhido e quais foram descartados.
 

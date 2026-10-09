@@ -48,7 +48,7 @@ Um gateway que fica entre as aplicações e os modelos:
 |---|---|
 | **Prova que economiza** | Cada versão publica a tabela "router vs modelo único" com acerto, custo por resposta correta e latência, medida num conjunto de teste separado e congelado. |
 | **Escada com checagem** | Modelo barato primeiro; sobe para o caro só quando uma checagem objetiva falha. |
-| **Benchmark de domínio real** | Perguntas de engenharia de corrida (NASCAR no iRacing) com gabarito revisado por engenheiro de setup. |
+| **Benchmark de domínio real** | 58 perguntas de engenharia de corrida (NASCAR Next Gen no iRacing), incluindo pegadinhas e perguntas sem resposta nas fontes. O gabarito foi escrito com IA e revisado pelo autor; a revisão por engenheiro de setup está pendente e será informada quando feita. |
 | **Jev fora do hype, dentro do projeto** | O Jev classifica a dificuldade da pergunta e escolhe o degrau inicial da escada. Entra como política plugável, com tempo-limite e volta para a regra se não responder, e com o próprio custo somado ao da chamada. Só vira a política principal se ganhar no conjunto de teste. |
 | **Concorrente de mercado na tabela** | O Auto Router do OpenRouter (`openrouter/auto`) é medido no mesmo conjunto. |
 | **Números honestos** | O README mostra também o que perdeu, intervalos de confiança e limites da medida. |
