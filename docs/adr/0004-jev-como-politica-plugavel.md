@@ -15,3 +15,11 @@ O custo do Jev é somado ao custo da chamada. Ele vira a política principal só
 - O primeiro número sai na V0, por simulação sobre as respostas gravadas (custo de centavos). A integração ao
   vivo vem na V2, e o resultado ao vivo é comparado com o simulado.
 - Exige `TYPESAFE_API_KEY` a partir da V0.
+
+## Revisão (2026-10-10)
+O Jev está disponível no OpenRouter como `typesafe/jev-router`: um router completo que escolhe o modelo e o nível
+de raciocínio de cada pedido. Não há, pelo OpenRouter, um classificador de dificuldade separado. Por isso:
+- **V0:** o Jev Router é medido como **router de mercado**, ao lado do `openrouter/auto`, na mesma tabela e com o
+  mesmo contexto. A simulação "Jev escolhe o degrau inicial da escada" sai do plano.
+- **V2:** a política Jev do gateway delega a escolha ao `typesafe/jev-router`, com tempo-limite e volta para a regra.
+- Usa a mesma chave do OpenRouter; `TYPESAFE_API_KEY` deixa de ser necessária.

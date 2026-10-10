@@ -54,7 +54,6 @@ Rede: uma rede docker própria (`llm-gateway`). Apenas o `gateway` publica porta
 | Chaves dos apps | `.env` como hash SHA-256 | V1 |
 | `DATABASE_URL`, `REDIS_URL` | `.env` | V1/V2 |
 | `GRAFANA_ADMIN_PASSWORD` | `.env` | V1 |
-| `TYPESAFE_API_KEY` | `.env` | V0 (teste simulado) |
 
 Regras: `.env` no `.gitignore`; `.env.example` com chaves vazias; nenhum segredo em log, commit, issue ou conversa.
 
@@ -75,6 +74,6 @@ O backup é restaurado num container local uma vez antes do primeiro deploy, par
 |---|---|
 | VPS | Já existente |
 | OpenRouter | Por uso; teto pelo orçamento por app; taxa de ~5,5% sobre créditos |
-| Benchmark V0 | US$ 4–7 (estimativa) |
-| Jev | ~US$ 0,04 por milhão de tokens de entrada (centavos no teste da V0) |
+| Benchmark V0 | ~US$ 4 pelos preços do catálogo (teto US$ 8) |
+| Jev | Pelo OpenRouter (`typesafe/jev-router`), mesma chave; custo por chamada registrado |
 | GitHub Actions e GHCR | Gratuito para repositório público |
