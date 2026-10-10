@@ -264,6 +264,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--concurrency", type=int, default=4)
     parser.add_argument("--snapshot", type=Path, default=DEFAULT_SNAPSHOT)
     parser.add_argument("--session", type=Path, default=DEFAULT_SESSION)
+    parser.add_argument("--ids", help="comma-separated question IDs within the subset (smoke test)")
     parser.add_argument("--dry-run", action="store_true")
     args = parser.parse_args(argv)
 
@@ -271,6 +272,11 @@ def main(argv: list[str] | None = None) -> int:
     if settings.bench_dataset_path is None:
         parser.error("BENCH_DATASET_PATH is not set")
     questions = select_questions(settings.bench_dataset_path, args.subset)
+    if args.ids:
+        wanted = set(args.ids.split(","))
+        questions = [q for q in questions if q.id in wanted]
+        if {q.id for q in questions} != wanted:
+            parser.error("some --ids are not in the chosen subset")
     context = Context.load(args.snapshot, args.session)
     targets = args.models.split(",") if args.models else load_targets()
     run_dir = DATA_DIR / "runs" / args.run_name
