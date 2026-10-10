@@ -1,0 +1,22 @@
+{
+  "_note": "Benchmark targets (decision 2026-10-10). Slugs checked against the OpenRouter catalog on that day.",
+  "models": [
+    {"slug": "anthropic/claude-sonnet-5.5", "group": "closed"},
+    {"slug": "anthropic/claude-haiku-5.5", "group": "closed"},
+    {"slug": "openai/gpt-6-luna", "group": "closed"},
+    {"slug": "google/gemini-3.8-flash", "group": "closed"},
+    {"slug": "qwen/qwen3.8-flash", "group": "open"},
+    {"slug": "qwen/qwen3.8-27b", "group": "open"},
+    {"slug": "qwen/qwen3.8-2.4t-a95b", "group": "open"},
+    {"slug": "deepseek/deepseek-v4.1-flash", "group": "open"},
+    {"slug": "deepseek/deepseek-v4-pro", "group": "open"},
+    {"slug": "moonshotai/kimi-k3", "group": "open"},
+    {"slug": "z-ai/glm-5.3", "group": "open"},
+    {"slug": "openai/gpt-oss-120b", "group": "open"},
+    {"slug": "meta-llama/llama-4-maverick", "group": "open"},
+    {"slug": "mistralai/mistral-small-2603", "group": "open"},
+    {"slug": "nvidia/nemotron-3-super-120b-a12b", "group": "open"},
+    {"slug": "openrouter/auto", "group": "router"},
+    {"slug": "typesafe/jev-router", "group": "router"}
+  ]
+}
