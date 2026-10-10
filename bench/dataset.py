@@ -24,6 +24,8 @@ class Question(BaseModel):
     citation_required: bool = False
     # Sources the answer should cite when citation_required is true.
     expected_sources: list[str] = Field(default_factory=list)
+    # (document file stem, page) pairs the answer key points to; used to check citations.
+    gold_sources: list[tuple[str, int | None]] = Field(default_factory=list)
     # Gold excerpts behind the expected answer. Private: never written to the repo or results.
     source_passages: list[str] = Field(default_factory=list, repr=False)
     # Known pitfall the judge should check for (e.g. confusing car series).
