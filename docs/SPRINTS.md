@@ -48,6 +48,9 @@ IDs: `GW-<sprint>.<n>`.
 
 ## Sprint 2 — Benchmark V0 (19–25/10) · release `v0.1.0`
 
+**Status (10/10):** concluída adiantada e publicada como `v0.1.0`, exceto GW-2.4: a conferência humana do juiz
+(planilha de 30 respostas) está pendente. Gasto real: US$ 6,31.
+
 | ID | Tarefa |
 |---|---|
 | GW-2.0 | Contexto congelado (decisão 2a): busca do iRacingEng no banco de staging, modos híbrido e com reordenação, e bloco de números da sessão de Bristol — feito em 10/10 |

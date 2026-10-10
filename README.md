@@ -7,7 +7,7 @@
 > Benchmarks 13 models (closed and open source, including Qwen) and two market routers, **Jev Router** and
 > OpenRouter Auto, on the same frozen test set.
 
-**Status:** planning complete · Sprint 0 · next release: `v0.1.0` (benchmark), due 2026-10-25.
+**Status:** `v0.1.0` — benchmark published (see [Results](#results--v010-test-set)). Next: V1, the gateway itself.
 
 ---
 
@@ -68,20 +68,52 @@ its value with numbers:
 
 Decision record (Portuguese): [docs/adr/0004-jev-como-politica-plugavel.md](docs/adr/0004-jev-como-politica-plugavel.md).
 
-## Results
+## Results — v0.1.0 (test set)
 
-> Published starting at `v0.1.0`. Methodology (Portuguese): [docs/BENCHMARK.md](docs/BENCHMARK.md).
+29 held-out questions, configuration frozen before the run (git tag `bench-v0-frozen`), same frozen
+retrieval context for every target. Methodology (Portuguese): [docs/BENCHMARK.md](docs/BENCHMARK.md).
 
-| Target | Accuracy | Cost per question | Cost per correct answer | Latency p50 / p95 |
-|---|---|---|---|---|
-| Sonnet 5.5 alone | — | — | — | — |
-| Cheapest model alone | — | — | — | — |
-| Best single model | — | — | — | — |
-| OpenRouter Auto (`openrouter/auto`) | — | — | — | — |
-| Jev Router (`typesafe/jev-router`) | — | — | — | — |
-| Ladder with rule | — | — | — | — |
-| Learned router | — | — | — | — |
-| Oracle (theoretical bound) | — | — | — | — |
+| Target | Accuracy | 95% CI | Cost / question | Cost / correct answer | Latency p50 / p95 |
+|---|---|---|---|---|---|
+| *Oracle (theoretical bound)* | 26/29 = 90% | 74–96% | $0.0003 | $0.0003 | — |
+| DeepSeek V4 Pro (open) | 24/28 = 86% | 69–94% | $0.0023 | $0.0028 | 14.2 / 31.7 s |
+| **GPT-6 Luna** | **24/29 = 83%** | 65–92% | **$0.0007** | **$0.0008** | **3.9 / 8.1 s** |
+| OpenRouter Auto (`openrouter/auto`) | 24/29 = 83% | 65–92% | $0.0010 | $0.0013 | 6.0 / 15.1 s |
+| Qwen 3.8 Flash (open) | 24/29 = 83% | 65–92% | $0.0014 | $0.0016 | 34.1 / 95.3 s |
+| Qwen 3.8 27B (open) | 24/29 = 83% | 65–92% | $0.0050 | $0.0060 | 21.1 / 122.2 s |
+| Gemini 3.8 Flash | 24/29 = 83% | 65–92% | $0.0064 | $0.0078 | 7.6 / 14.0 s |
+| Nemotron 3 Super (open) | 23/29 = 79% | 62–90% | $0.0007 | $0.0008 | 23.0 / 57.3 s |
+| Haiku 5.5 | 23/29 = 79% | 62–90% | $0.0012 | $0.0015 | 6.5 / 10.7 s |
+| GLM 5.3 (open) | 23/29 = 79% | 62–90% | $0.0045 | $0.0057 | 7.5 / 22.6 s |
+| DeepSeek V4.1 Flash (open) | 22/29 = 76% | 58–88% | $0.0011 | $0.0015 | 5.1 / 18.2 s |
+| **Jev Router (`typesafe/jev-router`)** | 22/29 = 76% | 58–88% | $0.0047 | $0.0062 | 9.9 / 14.3 s |
+| **Sonnet 5.5** | 21/29 = 72% | 54–85% | **$0.0196** | **$0.0271** | 9.3 / 13.0 s |
+| Mistral Small (open, 25/29 answered) | 17/25 = 68% | 48–83% | $0.0005 | $0.0007 | 1.6 / 2.5 s |
+| gpt-oss-120b (open) | 19/29 = 66% | 47–80% | $0.0003 | $0.0004 | 9.9 / 29.6 s |
+| Llama 4 Maverick (open) | 19/29 = 66% | 47–80% | $0.0006 | $0.0010 | 6.4 / 14.0 s |
+
+**Decision rule** (fixed before the test run): lowest cost per correct answer among routes within
+5 points of the best accuracy → **GPT-6 Luna**: 83% (best: 86%) at **$0.0008 per correct answer,
+34× cheaper than Sonnet 5.5**, and the fastest of the top group.
+
+**What it shows**
+- The expensive default (Sonnet 5.5) does not win: 72% at $0.0271 per correct answer.
+- Cheap and open-weight models reach the top cluster (76–86%) at a fraction of the cost.
+- OpenRouter Auto matched the top group (83%) for $0.0013 per correct answer; Jev Router reached 76% at
+  $0.0062.
+- The oracle (cheapest model that got each question right) reaches 90% at $0.0003: the room a smarter
+  router could still capture.
+
+**Limits, stated plainly**
+- 29 questions: confidence intervals overlap from 76% to 86%; differences inside that band are not
+  conclusive. On the tune set the order changed (DeepSeek V4.1 Flash looked best there).
+- Correctness is decided by an LLM judge (Mistral Large 4, binary, against the answer key). **The human
+  check of the judge is still pending**; results will be updated if agreement is below 85%.
+- The answer key was drafted with AI and reviewed by the author; setup-engineer review is pending.
+- The simulated ladder never escalated: almost every answer cites valid sources even when wrong, so a
+  citation check does not detect wrong answers. A better escalation check is V2 work.
+- Mistral Small: 4 answers missing (provider rate limits). One answer (out of 435) had no judge verdict.
+- Whole V0 cost: **US$ 6.31** (answers, judge, smoke test and retrieval freeze).
 
 ## Stack
 
