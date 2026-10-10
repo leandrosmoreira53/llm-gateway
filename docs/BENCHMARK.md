@@ -25,7 +25,7 @@ O benchmark é o produto principal: toda afirmação de economia no README vem d
 
 | Alvo | Descrição |
 |---|---|
-| Modelos únicos | 16 modelos (lista e slugs em `docs/PLANO.md`, V0): 4 fechados de referência e 12 open source, incluindo 3 Qwen |
+| Modelos únicos | 15 modelos (lista e slugs em `docs/PLANO.md`, V0): 4 fechados de referência e 11 open source, incluindo 3 Qwen |
 | `openrouter/auto` | Auto Router do OpenRouter; o modelo escolhido por pergunta é registrado |
 | Jev Router | `typesafe/jev-router` (TypeSafe, pelo OpenRouter): escolhe modelo e nível de raciocínio; o modelo escolhido por pergunta é registrado |
 | Escada com regra | Simulada sobre as respostas gravadas (V0) e medida ao vivo (V2) |

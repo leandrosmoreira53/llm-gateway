@@ -8,7 +8,7 @@ As datas são uma proposta e devem ser revisadas na revisão de cada sprint.
 | Fase | Objetivo | Sprints | Release | Data alvo |
 |---|---|---|---|---|
 | **Sprint 0** | Planejamento, documentação, repositório | S0 | — | 11/10/2026 |
-| **V0 — Benchmark** | Saber, com dado, se rotear vale a pena antes de construir (16 modelos, OpenRouter Auto e Jev Router) | S1–S2 | `v0.1.0` | 25/10/2026 |
+| **V0 — Benchmark** | Saber, com dado, se rotear vale a pena antes de construir (15 modelos, OpenRouter Auto e Jev Router) | S1–S2 | `v0.1.0` | 25/10/2026 |
 | **V1 — Gateway funcional** | API compatível com OpenAI, regra fixa, registro, painel simples | S3–S4 | `v0.2.0` | 08/11/2026 |
 | **V2 — Escada e resiliência** | Escada com checagem, cache, orçamento, rate limit, Jev, caos, deploy | S5–S6 | `v0.3.0` | 22/11/2026 |
 | **V3 — Aprende + observabilidade** | Router aprendido, feedback, Prometheus, OpenTelemetry | S7–S8 | `v1.0.0` | 06/12/2026 |

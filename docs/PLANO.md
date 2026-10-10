@@ -2,7 +2,7 @@
 
 Versão 3, 2026-10-07 (Grafana e fallback de provedor adiantados para a V1; entram k6, rate limit, pgvector e
 convenções GenAI do OpenTelemetry; `openrouter/auto` no benchmark; roteamento de provedor; endpoint de feedback;
-volta do iRacingEng para o OpenRouter direto se o gateway cair). Versão 4, 2026-10-10: 16 modelos (com Qwen e
+volta do iRacingEng para o OpenRouter direto se o gateway cair). Versão 4, 2026-10-10: 15 modelos (com Qwen e
 open source) e o Jev medido como router pelo OpenRouter (`typesafe/jev-router`). Versão 2: Jev passou para a V2 como política alternativa. Autor do pedido: Leandro. Projeto **separado** do iRacingEng, feito para portfólio
 e para servir o iRacingEng e outros sistemas.
 
@@ -93,7 +93,7 @@ Objetivo: saber, com dado, se rotear vale a pena antes de construir.
   com semente fixa). Ver §7 sobre privacidade.
 - Avaliação: checagem de citação (automática), checagem de recusa (automática), juiz binário comparando com
   a resposta esperada, e amostra de 10 por modelo conferida por você.
-- Rodar 16 modelos (decisão de 2026-10-10; slugs do OpenRouter conferidos no catálogo nesse dia):
+- Rodar 15 modelos (decisão de 2026-10-10; slugs do OpenRouter conferidos no catálogo nesse dia):
   - **Fechados:** `anthropic/claude-sonnet-5.5`, `anthropic/claude-haiku-5.5`, `openai/gpt-6-luna`,
     `google/gemini-3.8-flash`.
   - **Open source (pesos publicados):** `qwen/qwen3.8-flash`, `qwen/qwen3.8-27b`, `qwen/qwen3.8-2.4t-a95b`,
@@ -105,7 +105,7 @@ Objetivo: saber, com dado, se rotear vale a pena antes de construir.
   (campo `model` da resposta): **`openrouter/auto`** (Auto Router do OpenRouter) e **`typesafe/jev-router`**
   (Jev Router da TypeSafe, no OpenRouter: escolhe modelo e nível de raciocínio).
 - Simular a escada em cima das respostas gravadas (sem gastar de novo).
-- **Pronto quando:** existe a tabela acerto × custo por resposta correta × latência para os 16 modelos, os dois
+- **Pronto quando:** existe a tabela acerto × custo por resposta correta × latência para os 15 modelos, os dois
   routers de mercado (`openrouter/auto` e Jev Router), a escada com regra e o oráculo. Custo estimado pelos preços
   do catálogo: ~US$ 4 (modelos + juiz); **teto de US$ 8** (o script para sozinho se passar).
 

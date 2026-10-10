@@ -51,7 +51,7 @@ IDs: `GW-<sprint>.<n>`.
 | ID | Tarefa |
 |---|---|
 | GW-2.0 | Contexto congelado (decisão 2a): busca do iRacingEng no banco de staging, modos híbrido e com reordenação, e bloco de números da sessão de Bristol — feito em 10/10 |
-| GW-2.1 | `bench/run.py`: roda os 16 modelos, o `openrouter/auto` e o Jev Router com o contexto congelado; respostas brutas fora do git; retomável; estimativa de custo e teto (US$ 8) |
+| GW-2.1 | `bench/run.py`: roda os 15 modelos, o `openrouter/auto` e o Jev Router com o contexto congelado; respostas brutas fora do git; retomável; estimativa de custo e teto (US$ 8) |
 | GW-2.2 | `validators/citation.py` e `validators/refusal.py` |
 | GW-2.3 | `bench/grade.py`: juiz binário com gabarito |
 | GW-2.4 | Revisão humana: 10 respostas por modelo (Leandro), via CSV; taxa de concordância com o juiz |
@@ -59,7 +59,7 @@ IDs: `GW-<sprint>.<n>`.
 | GW-2.6 | Jev Router (`typesafe/jev-router`) medido como router de mercado, registrando o modelo escolhido por pergunta |
 | GW-2.7 | Tabela de resultados com intervalo de confiança no README |
 
-**Aceite:** tabela publicada para os 16 modelos, `openrouter/auto`, Jev Router, escada com regra e oráculo;
+**Aceite:** tabela publicada para os 15 modelos, `openrouter/auto`, Jev Router, escada com regra e oráculo;
 gasto real registrado (estimativa: ~US$ 4; teto US$ 8).
 
 ---
