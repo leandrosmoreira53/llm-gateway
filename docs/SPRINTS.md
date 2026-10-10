@@ -50,6 +50,7 @@ IDs: `GW-<sprint>.<n>`.
 
 | ID | Tarefa |
 |---|---|
+| GW-2.0 | Contexto congelado (decisão 2a): busca do iRacingEng no banco de staging, modos híbrido e com reordenação, e bloco de números da sessão de Bristol — feito em 10/10 |
 | GW-2.1 | `bench/run.py`: roda os 5 modelos e o `openrouter/auto`; respostas brutas gravadas fora do git; retomável; estimativa de custo com confirmação |
 | GW-2.2 | `validators/citation.py` e `validators/refusal.py` |
 | GW-2.3 | `bench/grade.py`: juiz binário com gabarito |

@@ -1,0 +1,41 @@
+{
+  "retrieval_snapshot": {
+    "file": "bench/data/retrieval/snapshot-staging-2026-10-10.json (private, not in git)",
+    "sha256": "33d68e05fa85b0dcc2761fdfe5ef76fa290e8abbe3cce9e2bae3e717da62ac13",
+    "created_at": "2026-10-10T11:27:30+00:00",
+    "environment": "staging",
+    "image": "8b773bbd4f95",
+    "embed_model": "qwen/qwen3-embedding-8b",
+    "rerank_model": "cohere/rerank-v3.5",
+    "k": 8,
+    "pool": 20,
+    "modes": [
+      "hibrida",
+      "rerank"
+    ],
+    "query_language": "pt",
+    "kb_chunks": 511,
+    "glossary_terms": 145,
+    "questions": 58,
+    "paid_calls": {
+      "embeddings": 58,
+      "rerank": 58
+    },
+    "distinct_chunks": 204,
+    "recall_at_8_vs_answer_key_pages": {
+      "hibrida": "39/47",
+      "rerank": "40/47"
+    },
+    "mrr": {
+      "hibrida": 0.65,
+      "rerank": 0.71
+    },
+    "note": "11 of 58 questions have no manual page in the answer key (5 no-answer, 6 session-only sources counted out); recall counts a hit when any gold (file, page) appears in the top 8."
+  },
+  "session_block": {
+    "file": "bench/data/session/numeros-bristol.txt (private, not in git)",
+    "sha256": "5a1235729c0608cdbcb9ad211f876be1f2e12ea8efdd75fbdeb7abf2679919c8",
+    "session": "bristol-2026-09-20",
+    "built_with": "iRacingEng crates/engine/examples/ibt_info (--laps, --yaml CarSetup, --csv TrackTempCrew) + bench.session_context"
+  }
+}
