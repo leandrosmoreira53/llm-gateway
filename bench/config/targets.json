@@ -1,0 +1,65 @@
+{
+  "_note": "Benchmark targets (decision 2026-10-10): 13 models + 2 routers. Qwen 3.8 2.4T and Kimi K3 dropped after the smoke run to fit the US$ 8 cap.",
+  "models": [
+    {
+      "slug": "anthropic/claude-sonnet-5.5",
+      "group": "closed"
+    },
+    {
+      "slug": "anthropic/claude-haiku-5.5",
+      "group": "closed"
+    },
+    {
+      "slug": "openai/gpt-6-luna",
+      "group": "closed"
+    },
+    {
+      "slug": "google/gemini-3.8-flash",
+      "group": "closed"
+    },
+    {
+      "slug": "qwen/qwen3.8-flash",
+      "group": "open"
+    },
+    {
+      "slug": "qwen/qwen3.8-27b",
+      "group": "open"
+    },
+    {
+      "slug": "deepseek/deepseek-v4.1-flash",
+      "group": "open"
+    },
+    {
+      "slug": "deepseek/deepseek-v4-pro",
+      "group": "open"
+    },
+    {
+      "slug": "z-ai/glm-5.3",
+      "group": "open"
+    },
+    {
+      "slug": "openai/gpt-oss-120b",
+      "group": "open"
+    },
+    {
+      "slug": "meta-llama/llama-4-maverick",
+      "group": "open"
+    },
+    {
+      "slug": "mistralai/mistral-small-2603",
+      "group": "open"
+    },
+    {
+      "slug": "nvidia/nemotron-3-super-120b-a12b",
+      "group": "open"
+    },
+    {
+      "slug": "openrouter/auto",
+      "group": "router"
+    },
+    {
+      "slug": "typesafe/jev-router",
+      "group": "router"
+    }
+  ]
+}
