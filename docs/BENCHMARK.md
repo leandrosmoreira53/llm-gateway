@@ -32,6 +32,23 @@ O benchmark é o produto principal: toda afirmação de economia no README vem d
 | Router aprendido | V3 |
 | Oráculo | Para cada pergunta, o modelo mais barato que acertou. É o limite teórico |
 
+## Contexto enviado aos modelos
+
+O gabarito é de RAG: as respostas vêm de trechos de manuais e, nas perguntas de sessão, de dados da sessão.
+Para medir a tarefa real do iRacingEng (e não a memória do modelo), todo modelo recebe **o mesmo contexto
+congelado** (decisão de 2026-10-08):
+
+- **Trechos:** a busca do próprio iRacingEng rodada uma vez no banco de staging (511 trechos de 12 manuais),
+  top-8 por pergunta, em dois modos: **híbrido** (principal) e **com reordenação** (`cohere/rerank-v3.5`).
+  Contexto realista, com acertos e erros: a página do gabarito aparece no top-8 em 39/47 perguntas no
+  híbrido e 40/47 com reordenação. As perguntas sem resposta também recebem os trechos que a busca trouxe.
+- **Números da sessão:** as perguntas de sessão recebem o bloco gerado pela ferramenta `ibt_info` do
+  iRacingEng a partir do arquivo `.ibt` de Bristol (voltas, temperatura da pista, setup), sem cálculo nosso.
+- **Privacidade:** trechos e números ficam fora do git (`bench/data/`). No repositório entram só os
+  metadados e as assinaturas SHA-256 (`bench/results/context-freeze-*.json`).
+- **Como foi gerado:** `bench/vps/run_freeze.sh` roda `bench/vps/freeze_retrieval.py` dentro do container de
+  RAG do iRacingEng na VPS; a senha do banco não sai do servidor e o banco só é lido.
+
 ## Avaliação
 
 | Checagem | Tipo | O que verifica |

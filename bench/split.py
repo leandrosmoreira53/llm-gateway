@@ -86,7 +86,9 @@ def update_fingerprint(path: Path, *, dataset_path: Path) -> Split:
     if set(split.tune) | set(split.test) != ids:
         raise SplitError("Split IDs do not match dataset IDs; the split cannot be kept")
     updated = split.model_copy(update={"dataset_sha256": dataset_fingerprint(dataset_path)})
-    path.write_text(json.dumps(updated.model_dump(), indent=2) + "\n", encoding="utf-8")
+    path.write_text(
+        json.dumps(updated.model_dump(), indent=2) + "\n", encoding="utf-8", newline="\n"
+    )
     return updated
 
 
@@ -112,7 +114,9 @@ def main(argv: list[str] | None = None) -> int:
     questions = load_dataset(args.dataset)
     split = make_split(questions, seed=args.seed, dataset_sha256=dataset_fingerprint(args.dataset))
     args.out.parent.mkdir(parents=True, exist_ok=True)
-    args.out.write_text(json.dumps(split.model_dump(), indent=2) + "\n", encoding="utf-8")
+    args.out.write_text(
+        json.dumps(split.model_dump(), indent=2) + "\n", encoding="utf-8", newline="\n"
+    )
     print(f"tune={len(split.tune)} test={len(split.test)} seed={split.seed} -> {args.out}")
     return 0
 

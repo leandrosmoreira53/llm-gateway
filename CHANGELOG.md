@@ -13,3 +13,5 @@ Formato baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/); 
 - Esqueleto do projeto (uv, ruff, mypy, pytest, pre-commit) e CI no GitHub Actions (GW-1.1, 1.2, 1.6).
 - Cliente do OpenRouter com custo, tokens, latência, reservas e erros tipados (GW-1.3).
 - Formato do gabarito em JSONL, exemplo público e divisão ajuste/teste congelada (GW-1.4, 1.5).
+- Leitor do gabarito do iRacingEng e divisão estratificada por categoria (GW-1.5).
+- Contexto congelado do benchmark: busca do iRacingEng (híbrida e com reordenação) e números da sessão de Bristol (GW-2.0).

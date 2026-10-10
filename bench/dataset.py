@@ -79,5 +79,9 @@ def load_dataset(path: Path) -> list[Question]:
 
 
 def dataset_fingerprint(path: Path) -> str:
-    """SHA-256 of the file, used to detect that the answer key changed after the split."""
-    return hashlib.sha256(path.read_bytes()).hexdigest()
+    """SHA-256 of the file with line endings normalized to LF.
+
+    Detects that the answer key changed after the split; a Windows checkout (CRLF) and the Linux
+    copy on the VPS (LF) of the same file get the same fingerprint.
+    """
+    return hashlib.sha256(path.read_bytes().replace(b"\r\n", b"\n")).hexdigest()
