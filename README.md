@@ -4,7 +4,7 @@
 
 > An OpenAI-compatible LLM gateway that picks the model with the lowest **cost per correct answer**,
 > and publishes a reproducible benchmark showing how much it saves (and where it doesn't).
-> Benchmarks 15 models (closed and open source, including Qwen) and two market routers, **Jev Router** and
+> Benchmarks 13 models (closed and open source, including Qwen) and two market routers, **Jev Router** and
 > OpenRouter Auto, on the same frozen test set.
 
 **Status:** planning complete · Sprint 0 · next release: `v0.1.0` (benchmark), due 2026-10-25.
@@ -61,7 +61,7 @@ Jev is getting a lot of attention. Here it is not the gateway's brain, just anot
 its value with numbers:
 
 - **First result in `v0.1.0`**; integration as a gateway policy in V2.
-- **Same test, same decision rule:** Jev Router vs. OpenRouter Auto vs. this gateway's ladder vs. 15 single models, on the frozen test set.
+- **Same test, same decision rule:** Jev Router vs. OpenRouter Auto vs. this gateway's ladder vs. 13 single models, on the frozen test set.
 - **Full cost:** what Jev charges is included in the cost per correct answer.
 - **No blind dependency:** if Jev doesn't answer within the timeout, the rule takes over and the gateway keeps running.
 - **Result published either way**, including if Jev loses.

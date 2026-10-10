@@ -2,7 +2,7 @@
 
 Versão 3, 2026-10-07 (Grafana e fallback de provedor adiantados para a V1; entram k6, rate limit, pgvector e
 convenções GenAI do OpenTelemetry; `openrouter/auto` no benchmark; roteamento de provedor; endpoint de feedback;
-volta do iRacingEng para o OpenRouter direto se o gateway cair). Versão 4, 2026-10-10: 15 modelos (com Qwen e
+volta do iRacingEng para o OpenRouter direto se o gateway cair). Versão 4, 2026-10-10: 13 modelos (com Qwen e
 open source) e o Jev medido como router pelo OpenRouter (`typesafe/jev-router`). Versão 2: Jev passou para a V2 como política alternativa. Autor do pedido: Leandro. Projeto **separado** do iRacingEng, feito para portfólio
 e para servir o iRacingEng e outros sistemas.
 
@@ -93,11 +93,12 @@ Objetivo: saber, com dado, se rotear vale a pena antes de construir.
   com semente fixa). Ver §7 sobre privacidade.
 - Avaliação: checagem de citação (automática), checagem de recusa (automática), juiz binário comparando com
   a resposta esperada, e amostra de 10 por modelo conferida por você.
-- Rodar 15 modelos (decisão de 2026-10-10; slugs do OpenRouter conferidos no catálogo nesse dia):
+- Rodar 13 modelos (decisão de 2026-10-10; slugs do OpenRouter conferidos no catálogo nesse dia; Qwen 3.8 2.4T e
+  Kimi K3 saíram depois do teste rápido para caber no teto de US$ 8: eram ~45% do custo):
   - **Fechados:** `anthropic/claude-sonnet-5.5`, `anthropic/claude-haiku-5.5`, `openai/gpt-6-luna`,
     `google/gemini-3.8-flash`.
-  - **Open source (pesos publicados):** `qwen/qwen3.8-flash`, `qwen/qwen3.8-27b`, `qwen/qwen3.8-2.4t-a95b`,
-    `deepseek/deepseek-v4.1-flash`, `deepseek/deepseek-v4-pro`, `moonshotai/kimi-k3`, `z-ai/glm-5.3`,
+  - **Open source (pesos publicados):** `qwen/qwen3.8-flash`, `qwen/qwen3.8-27b`,
+    `deepseek/deepseek-v4.1-flash`, `deepseek/deepseek-v4-pro`, `z-ai/glm-5.3`,
     `openai/gpt-oss-120b`, `meta-llama/llama-4-maverick`, `mistralai/mistral-small-2603`,
     `nvidia/nemotron-3-super-120b-a12b`.
   - Raciocínio no padrão de cada modelo; tokens de raciocínio registrados na tabela.
@@ -105,9 +106,10 @@ Objetivo: saber, com dado, se rotear vale a pena antes de construir.
   (campo `model` da resposta): **`openrouter/auto`** (Auto Router do OpenRouter) e **`typesafe/jev-router`**
   (Jev Router da TypeSafe, no OpenRouter: escolhe modelo e nível de raciocínio).
 - Simular a escada em cima das respostas gravadas (sem gastar de novo).
-- **Pronto quando:** existe a tabela acerto × custo por resposta correta × latência para os 15 modelos, os dois
+- **Pronto quando:** existe a tabela acerto × custo por resposta correta × latência para os 13 modelos, os dois
   routers de mercado (`openrouter/auto` e Jev Router), a escada com regra e o oráculo. Custo estimado pelos preços
-  do catálogo: ~US$ 4 (modelos + juiz); **teto de US$ 8** (o script para sozinho se passar).
+  medido no teste rápido (1 pergunta × 17 alvos = US$ 0,16): ~US$ 6 com 13 modelos + juiz; **teto de US$ 8** (o script
+  para sozinho se passar).
 
 ### V1 — Gateway funcional
 - `POST /v1/chat/completions` e `GET /v1/models` no formato OpenAI (com e sem streaming).
