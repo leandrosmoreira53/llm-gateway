@@ -68,6 +68,7 @@ def from_iracingeng(raw: dict[str, Any]) -> Question:
         no_answer=row.sem_resposta,
         citation_required=bool(row.fontes) and not row.sem_resposta,
         expected_sources=[source.label() for source in row.fontes],
+        gold_sources=[(source.arquivo or source.doc, source.pagina) for source in row.fontes],
         source_passages=[
             source.trecho if source.trecho else f"{source.sessao}: {source.dado} = {source.valor}"
             for source in row.fontes
