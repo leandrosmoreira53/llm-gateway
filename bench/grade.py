@@ -236,6 +236,8 @@ def main(argv: list[str] | None = None) -> int:
     if args.dry_run:
         return 0
 
+    print(f"OpenRouter key in use: {settings.key_hint()}")
+
     async def go() -> dict[str, int]:
         async with OpenRouterProvider(settings) as provider:
             return await grade(
