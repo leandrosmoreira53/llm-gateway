@@ -32,9 +32,12 @@ from gateway.providers import ChatRequest, OpenRouterProvider, Provider, Resolve
 from gateway.providers.errors import ProviderError
 from gateway.validators import Source, check_citations, cites_any, says_not_in_sources
 
-JUDGE_PROMPT_VERSION = "judge_v1"
+JUDGE_PROMPT_VERSION = "judge_v1"  # prompt file; reasoning=low since 2026-10-10
 JUDGE_PROMPT = Path(__file__).parent / "prompts" / f"{JUDGE_PROMPT_VERSION}.md"
-JUDGE_MAX_TOKENS = 2000
+JUDGE_MAX_TOKENS = 4000
+# The judge answers a yes/no question: low reasoning keeps it cheap and stops long reasoning from
+# eating the token budget before the JSON verdict. Competitors keep their default reasoning.
+JUDGE_REASONING = {"effort": "low"}
 MAX_ATTEMPTS = 3
 
 
@@ -105,7 +108,11 @@ async def judge_one(
     provider: Provider, judge: str, question: Question, answer: str
 ) -> dict[str, Any]:
     request = ChatRequest.model_validate(
-        {"messages": judge_messages(question, answer), "max_tokens": JUDGE_MAX_TOKENS}
+        {
+            "messages": judge_messages(question, answer),
+            "max_tokens": JUDGE_MAX_TOKENS,
+            "reasoning": JUDGE_REASONING,
+        }
     )
     for attempt in range(1, MAX_ATTEMPTS + 1):
         try:
@@ -120,6 +127,9 @@ async def judge_one(
                 "judge_error": True,
             }
         correct, reason = parse_verdict(result.content)
+        if correct is None:
+            chars = len(result.content or "")
+            reason += f" (finish_reason={result.finish_reason}, content_chars={chars})"
         return {
             "judge_correct": correct,
             "judge_reason": reason,
