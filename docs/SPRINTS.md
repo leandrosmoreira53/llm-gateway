@@ -51,16 +51,16 @@ IDs: `GW-<sprint>.<n>`.
 | ID | Tarefa |
 |---|---|
 | GW-2.0 | Contexto congelado (decisão 2a): busca do iRacingEng no banco de staging, modos híbrido e com reordenação, e bloco de números da sessão de Bristol — feito em 10/10 |
-| GW-2.1 | `bench/run.py`: roda os 5 modelos e o `openrouter/auto`; respostas brutas gravadas fora do git; retomável; estimativa de custo com confirmação |
+| GW-2.1 | `bench/run.py`: roda os 13 modelos, o `openrouter/auto` e o Jev Router com o contexto congelado; respostas brutas fora do git; retomável; estimativa de custo e teto (US$ 8) |
 | GW-2.2 | `validators/citation.py` e `validators/refusal.py` |
 | GW-2.3 | `bench/grade.py`: juiz binário com gabarito |
 | GW-2.4 | Revisão humana: 10 respostas por modelo (Leandro), via CSV; taxa de concordância com o juiz |
 | GW-2.5 | `bench/simulate.py`: escada simulada e oráculo sobre as respostas gravadas |
-| GW-2.6 | Teste do Jev (simulado): classificação de dificuldade das 58 perguntas; mapa dificuldade → degrau ajustado no conjunto de ajuste; escada com Jev simulada no teste, com o custo do Jev |
+| GW-2.6 | Jev Router (`typesafe/jev-router`) medido como router de mercado, registrando o modelo escolhido por pergunta |
 | GW-2.7 | Tabela de resultados com intervalo de confiança no README |
 
-**Aceite:** tabela publicada para os 5 modelos, `openrouter/auto`, escada com regra, escada com Jev e oráculo;
-gasto real registrado (estimativa: US$ 4–7).
+**Aceite:** tabela publicada para os 13 modelos, `openrouter/auto`, Jev Router, escada com regra e oráculo;
+gasto real registrado (estimativa: ~US$ 6; teto US$ 8).
 
 ---
 
@@ -118,9 +118,9 @@ derrubado; painel mostra as chamadas.
 |---|---|
 | GW-6.1 | Orçamento por app (diário e mensal); acima do teto, só degraus baratos |
 | GW-6.2 | Modo sombra: responde com o modelo fixo e grava o que teria escolhido |
-| GW-6.3 | Política Jev ao vivo no gateway, com tempo-limite, volta para a regra e custo registrado |
+| GW-6.3 | Política Jev ao vivo no gateway (delegando ao `typesafe/jev-router`), com tempo-limite, volta para a regra e custo registrado |
 | GW-6.4 | Testes de caos (docker): Redis fora, Postgres fora, OpenRouter com 5xx e lentidão |
-| GW-6.5 | Benchmark V2 ao vivo: escada com regra × escada com Jev × Sonnet sozinho; comparar com a simulação da V0; k6 de novo |
+| GW-6.5 | Benchmark V2 ao vivo: escada com regra × política Jev × Sonnet sozinho; comparar com a V0; k6 de novo |
 
 **Aceite (V2 pronta):** tabela atualizada; testes de caos passando.
 

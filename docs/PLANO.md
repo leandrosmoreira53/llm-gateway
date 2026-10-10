@@ -2,7 +2,8 @@
 
 Versão 3, 2026-10-07 (Grafana e fallback de provedor adiantados para a V1; entram k6, rate limit, pgvector e
 convenções GenAI do OpenTelemetry; `openrouter/auto` no benchmark; roteamento de provedor; endpoint de feedback;
-volta do iRacingEng para o OpenRouter direto se o gateway cair). Versão 2: Jev passou para a V2 como política alternativa. Autor do pedido: Leandro. Projeto **separado** do iRacingEng, feito para portfólio
+volta do iRacingEng para o OpenRouter direto se o gateway cair). Versão 4, 2026-10-10: 13 modelos (com Qwen e
+open source) e o Jev medido como router pelo OpenRouter (`typesafe/jev-router`). Versão 2: Jev passou para a V2 como política alternativa. Autor do pedido: Leandro. Projeto **separado** do iRacingEng, feito para portfólio
 e para servir o iRacingEng e outros sistemas.
 
 ## 1. O que é
@@ -66,7 +67,7 @@ trocando o endereço. Não amarra a nenhum fornecedor.
 | Dashboard (custo, economia, % por modelo, sucesso) | Sim: Grafana simples lendo o Postgres na V1; completo com Prometheus na V3 | V1 / V3 |
 | Second Brain do router (grafo de experiência) | Depois, se o histórico mostrar padrão que uma tabela não resolve | V4+ |
 | LiteLLM na frente | **Não.** O gateway é o seu código; LiteLLM esconderia justamente a parte que vai no portfólio. Pode entrar como biblioteca de preços/tokens se ajudar. | — |
-| Jev como cérebro | **Como política alternativa plugável**, medida contra a regra no mesmo conjunto de teste. Se ganhar, vira a política principal; se perder, fica registrado no README. Não é a base porque é API fechada e paga (TypeSafe) e o gateway não pode parar se ela cair: sem resposta do Jev em X ms, vale a regra. Primeiro número já na V0, por simulação sobre as respostas gravadas. | V0 (simulado) / V2 (ao vivo) |
+| Jev como cérebro | **Medido na V0 como router de mercado (`typesafe/jev-router`, pelo OpenRouter) e, na V2, como política alternativa plugável**, medida contra a regra no mesmo conjunto de teste. Se ganhar, vira a política principal; se perder, fica registrado no README. Não é a base porque é API fechada e paga (TypeSafe) e o gateway não pode parar se ela cair: sem resposta do Jev em X ms, vale a regra. Primeiro número já na V0. | V0 (router) / V2 (política) |
 | Cache semântico | **Só como experimento medido**, com pgvector (sem banco vetorial separado). Em setup, "solto na entrada" e "solto na saída" são parecidos e têm resposta oposta. | V4 opcional |
 | Ollama / modelos locais | Fora enquanto a VPS tiver 8 GB sem GPU. Pode rodar no seu PC em teste. | — |
 | APIs diretas (Anthropic, OpenAI) além do OpenRouter | Só quando o gasto justificar a taxa do OpenRouter (~5,5%). A interface de provedor já nasce pronta para isso. | V4 |
@@ -92,17 +93,23 @@ Objetivo: saber, com dado, se rotear vale a pena antes de construir.
   com semente fixa). Ver §7 sobre privacidade.
 - Avaliação: checagem de citação (automática), checagem de recusa (automática), juiz binário comparando com
   a resposta esperada, e amostra de 10 por modelo conferida por você.
-- Rodar 5 modelos: Sonnet 5.5, Haiku 5.5, Gemini 3.8 Flash, GPT-5.6 Luna, DeepSeek V4.1 Flash.
-- Rodar também o **`openrouter/auto`** (Auto Router do OpenRouter) como concorrente, gravando qual modelo ele
-  escolheu em cada pergunta (campo `model` da resposta).
+- Rodar 13 modelos (decisão de 2026-10-10; slugs do OpenRouter conferidos no catálogo nesse dia; Qwen 3.8 2.4T e
+  Kimi K3 saíram depois do teste rápido para caber no teto de US$ 8: eram ~45% do custo):
+  - **Fechados:** `anthropic/claude-sonnet-5.5`, `anthropic/claude-haiku-5.5`, `openai/gpt-6-luna`,
+    `google/gemini-3.8-flash`.
+  - **Open source (pesos publicados):** `qwen/qwen3.8-flash`, `qwen/qwen3.8-27b`,
+    `deepseek/deepseek-v4.1-flash`, `deepseek/deepseek-v4-pro`, `z-ai/glm-5.3`,
+    `openai/gpt-oss-120b`, `meta-llama/llama-4-maverick`, `mistralai/mistral-small-2603`,
+    `nvidia/nemotron-3-super-120b-a12b`.
+  - Raciocínio no padrão de cada modelo; tokens de raciocínio registrados na tabela.
+- Rodar também os **routers de mercado** como concorrentes, gravando qual modelo eles escolheram em cada pergunta
+  (campo `model` da resposta): **`openrouter/auto`** (Auto Router do OpenRouter) e **`typesafe/jev-router`**
+  (Jev Router da TypeSafe, no OpenRouter: escolhe modelo e nível de raciocínio).
 - Simular a escada em cima das respostas gravadas (sem gastar de novo).
-- **Teste do Jev (simulado):** o Jev classifica a dificuldade das 58 perguntas (rubrica fixa fácil/média/difícil).
-  O mapa dificuldade → degrau inicial é ajustado só no conjunto de ajuste. No teste, a escada começa no degrau que
-  o Jev escolheu e sobe se a checagem falhar, usando as respostas já gravadas. O custo do Jev entra na conta.
-  Precisa de `TYPESAFE_API_KEY`.
-- **Pronto quando:** existe a tabela acerto × custo por resposta correta × latência para os 5 modelos, o
-  `openrouter/auto`, a escada com regra e a escada com Jev. Custo estimado: US$ 3–5, mais ~US$ 1–2 do
-  `openrouter/auto` e centavos do Jev.
+- **Pronto quando:** existe a tabela acerto × custo por resposta correta × latência para os 13 modelos, os dois
+  routers de mercado (`openrouter/auto` e Jev Router), a escada com regra e o oráculo. Custo estimado pelos preços
+  medido no teste rápido (1 pergunta × 17 alvos = US$ 0,16): ~US$ 6 com 13 modelos + juiz; **teto de US$ 8** (o script
+  para sozinho se passar).
 
 ### V1 — Gateway funcional
 - `POST /v1/chat/completions` e `GET /v1/models` no formato OpenAI (com e sem streaming).
@@ -128,7 +135,7 @@ Objetivo: saber, com dado, se rotear vale a pena antes de construir.
 
 ### V2 — Escada, orçamento e cache
 - Escada: barato → checagem → caro, com registro da falha e do degrau.
-- **Política Jev ao vivo** (plugável, ao lado da regra; a simulação já foi feita na V0): o Jev classifica a dificuldade da pergunta (rubrica fixa fácil/média/difícil, como no TokenTrim) e escolhe o degrau inicial. Tempo-limite com volta para a regra. Custo do Jev registrado em cada chamada (~US$ 0,04 por milhão de tokens de entrada). Precisa de chave da TypeSafe (`TYPESAFE_API_KEY`).
+- **Política Jev ao vivo** (plugável, ao lado da regra): o gateway delega a escolha ao Jev Router (`typesafe/jev-router`, pelo OpenRouter, mesma chave). Tempo-limite com volta para a regra; custo registrado em cada chamada. Medida contra a regra no conjunto de teste (ver ADR 0004).
 - Circuit breaker simples por modelo (a lista reserva já existe desde a V1).
 - Orçamento por app (diário e mensal); passou do teto, só degraus baratos.
 - **Rate limit por app** (token bucket no Redis): passou do limite, resposta 429 no formato OpenAI com
@@ -136,7 +143,7 @@ Objetivo: saber, com dado, se rotear vale a pena antes de construir.
 - k6 de novo: latência com escada e cache ligados, e taxa de acerto do cache.
 - Cache exato em Redis; o gateway continua funcionando se o Redis cair (teste de caos).
 - **Modo sombra:** o gateway responde com o modelo fixo, mas registra o que teria escolhido.
-- **Pronto quando:** benchmark mostra escada com regra vs escada com Jev vs Sonnet sozinho no conjunto de teste; teste de caos do Redis e do
+- **Pronto quando:** benchmark mostra escada com regra vs política Jev vs Sonnet sozinho no conjunto de teste; teste de caos do Redis e do
   Postgres passando (o gateway não pode travar se o banco cair).
 
 ### V3 — Aprende com o histórico + painel
@@ -233,8 +240,9 @@ Sempre no conjunto de **teste** (nunca no de ajuste), com configuração congela
 | Modelo mais barato sozinho | | | | |
 | Melhor modelo único | | | | |
 | OpenRouter Auto (`openrouter/auto`) | | | | |
+| Jev Router (`typesafe/jev-router`) | | | | |
 | Escada com regra (V0 simulada, V2 ao vivo) | | | | |
-| Escada com Jev (V0 simulada, V2 ao vivo) | | | | |
+| Política Jev no gateway (V2) | | | | |
 | Router aprendido (V3) | | | | |
 | Oráculo (o mais barato que acertou, por pergunta) | | | | — |
 

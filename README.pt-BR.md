@@ -4,7 +4,8 @@
 
 > Gateway de LLM compatível com a API da OpenAI que escolhe o modelo pelo **custo por resposta correta**
 > e publica, com benchmark reproduzível, quanto economiza (e onde não economiza).
-> Inclui o **Jev** como política de rota plugável, medido lado a lado com a regra no mesmo conjunto de teste.
+> Compara 13 modelos (fechados e open source, incluindo Qwen) e dois routers de mercado, **Jev Router** e
+> OpenRouter Auto, no mesmo conjunto de teste congelado.
 
 **Status:** planejamento concluído · Sprint 0 · próxima entrega: `v0.1.0` (benchmark), fim de 25/10/2026.
 
@@ -49,7 +50,7 @@ Um gateway que fica entre as aplicações e os modelos:
 | **Prova que economiza** | Cada versão publica a tabela "router vs modelo único" com acerto, custo por resposta correta e latência, medida num conjunto de teste separado e congelado. |
 | **Escada com checagem** | Modelo barato primeiro; sobe para o caro só quando uma checagem objetiva falha. |
 | **Benchmark de domínio real** | 58 perguntas de engenharia de corrida (NASCAR Next Gen no iRacing), incluindo pegadinhas e perguntas sem resposta nas fontes. O gabarito foi escrito com IA e revisado pelo autor; a revisão por engenheiro de setup está pendente e será informada quando feita. |
-| **Jev fora do hype, dentro do projeto** | O Jev classifica a dificuldade da pergunta e escolhe o degrau inicial da escada. Entra como política plugável, com tempo-limite e volta para a regra se não responder, e com o próprio custo somado ao da chamada. Só vira a política principal se ganhar no conjunto de teste. |
+| **Jev fora do hype, dentro do projeto** | O Jev Router da TypeSafe (`typesafe/jev-router`) escolhe modelo e nível de raciocínio por pedido. Ele é medido lado a lado, nas mesmas perguntas e com o mesmo contexto, com o custo completo. Na V2 pode entrar no gateway como política alternativa, com tempo-limite e volta para a regra; só vira a política principal se ganhar no conjunto de teste. |
 | **Concorrente de mercado na tabela** | O Auto Router do OpenRouter (`openrouter/auto`) é medido no mesmo conjunto. |
 | **Números honestos** | O README mostra também o que perdeu, intervalos de confiança e limites da medida. |
 | **Decisão auditável** | Toda chamada grava o modelo escolhido, os descartados e o motivo. |
@@ -59,9 +60,9 @@ Um gateway que fica entre as aplicações e os modelos:
 O Jev está em alta. Aqui ele não é tratado como cérebro do gateway, e sim como mais um candidato que precisa
 provar valor com números:
 
-- **Primeiro resultado já na `v0.1.0`** (simulação sobre as respostas gravadas); integração ao vivo na V2.
-- **Mesmo teste, mesma regra de decisão:** escada com Jev × escada com regra × Sonnet sozinho, no conjunto de
-  teste congelado.
+- **Primeiro resultado já na `v0.1.0`**; integração como política do gateway na V2.
+- **Mesmo teste, mesma regra de decisão:** Jev Router × OpenRouter Auto × escada deste gateway × 13 modelos
+  sozinhos, no conjunto de teste congelado.
 - **Custo completo:** o que se paga ao Jev entra no custo por resposta correta.
 - **Sem dependência cega:** se o Jev não responder no tempo-limite, a regra assume, e o gateway não para.
 - **Resultado publicado em qualquer caso**, inclusive se o Jev perder.
@@ -78,8 +79,8 @@ Detalhes da decisão em [docs/adr/0004-jev-como-politica-plugavel.md](docs/adr/0
 | Modelo mais barato sozinho | — | — | — | — |
 | Melhor modelo único | — | — | — | — |
 | OpenRouter Auto (`openrouter/auto`) | — | — | — | — |
+| Jev Router (`typesafe/jev-router`) | — | — | — | — |
 | Escada com regra | — | — | — | — |
-| Escada com Jev | — | — | — | — |
 | Router aprendido | — | — | — | — |
 | Oráculo (limite teórico) | — | — | — | — |
 

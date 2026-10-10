@@ -25,10 +25,11 @@ O benchmark é o produto principal: toda afirmação de economia no README vem d
 
 | Alvo | Descrição |
 |---|---|
-| Modelos únicos | Sonnet 5.5, Haiku 5.5, Gemini 3.8 Flash, GPT-5.6 Luna, DeepSeek V4.1 Flash |
+| Modelos únicos | 13 modelos (lista e slugs em `docs/PLANO.md`, V0): 4 fechados de referência e 9 open source, incluindo 2 Qwen |
 | `openrouter/auto` | Auto Router do OpenRouter; o modelo escolhido por pergunta é registrado |
+| Jev Router | `typesafe/jev-router` (TypeSafe, pelo OpenRouter): escolhe modelo e nível de raciocínio; o modelo escolhido por pergunta é registrado |
 | Escada com regra | Simulada sobre as respostas gravadas (V0) e medida ao vivo (V2) |
-| Escada com Jev | O Jev classifica a dificuldade e escolhe o degrau inicial. Simulada na V0 (mapa dificuldade → degrau ajustado só no conjunto de ajuste), ao vivo na V2. O custo do Jev entra na conta |
+| Política Jev no gateway | V2: o gateway delega ao Jev Router, com tempo-limite e volta para a regra |
 | Router aprendido | V3 |
 | Oráculo | Para cada pergunta, o modelo mais barato que acertou. É o limite teórico |
 
@@ -48,6 +49,13 @@ congelado** (decisão de 2026-10-08):
   metadados e as assinaturas SHA-256 (`bench/results/context-freeze-*.json`).
 - **Como foi gerado:** `bench/vps/run_freeze.sh` roda `bench/vps/freeze_retrieval.py` dentro do container de
   RAG do iRacingEng na VPS; a senha do banco não sai do servidor e o banco só é lido.
+
+## Raciocínio e custo
+
+- Cada modelo roda com o **raciocínio no padrão** dele (como seria usado de verdade). Os tokens de raciocínio são
+  cobrados como saída; a tabela mostra quanto cada modelo gastou com eles.
+- Teto da rodada completa: **US$ 8**. O script estima antes de rodar, mede o custo real a cada resposta e para
+  sozinho se o teto for atingido.
 
 ## Avaliação
 

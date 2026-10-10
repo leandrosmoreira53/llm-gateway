@@ -4,7 +4,8 @@
 
 > An OpenAI-compatible LLM gateway that picks the model with the lowest **cost per correct answer**,
 > and publishes a reproducible benchmark showing how much it saves (and where it doesn't).
-> Includes **Jev** as a pluggable routing policy, measured head-to-head against the rule on the same test set.
+> Benchmarks 13 models (closed and open source, including Qwen) and two market routers, **Jev Router** and
+> OpenRouter Auto, on the same frozen test set.
 
 **Status:** planning complete · Sprint 0 · next release: `v0.1.0` (benchmark), due 2026-10-25.
 
@@ -49,7 +50,7 @@ A gateway that sits between applications and models:
 | **Proven savings** | Every release publishes a "router vs. single model" table with accuracy, cost per correct answer and latency, measured on a held-out, frozen test set. |
 | **Validated ladder** | Cheap model first; escalate to the expensive one only when an objective check fails. |
 | **Real-domain benchmark** | 58 race-engineering questions (NASCAR Next Gen in iRacing), including trick questions and questions with no answer in the sources. The answer key was drafted with AI and reviewed by the author; review by a setup engineer is pending and will be reported when done. |
-| **Jev beyond the hype** | Jev rates question difficulty and picks the ladder's starting step. It plugs in as an alternative policy, with a timeout that falls back to the rule and its own cost added to each call. It becomes the main policy only if it wins on the test set. |
+| **Jev beyond the hype** | TypeSafe's Jev Router (`typesafe/jev-router`) picks a model and reasoning effort per request. It is measured head-to-head on the same questions and context, with its full cost. In V2 it can plug into the gateway as an alternative policy, with a timeout that falls back to the rule; it becomes the main policy only if it wins on the test set. |
 | **Market baseline in the table** | OpenRouter's Auto Router (`openrouter/auto`) is measured on the same set. |
 | **Honest numbers** | The README also reports what lost, confidence intervals and the limits of the measurement. |
 | **Auditable decisions** | Every call records the chosen model, the rejected ones and the reason. |
@@ -59,8 +60,8 @@ A gateway that sits between applications and models:
 Jev is getting a lot of attention. Here it is not the gateway's brain, just another candidate that has to prove
 its value with numbers:
 
-- **First result in `v0.1.0`** (simulated on recorded answers); live integration in V2.
-- **Same test, same decision rule:** ladder with Jev vs. ladder with the rule vs. Sonnet alone, on the frozen test set.
+- **First result in `v0.1.0`**; integration as a gateway policy in V2.
+- **Same test, same decision rule:** Jev Router vs. OpenRouter Auto vs. this gateway's ladder vs. 13 single models, on the frozen test set.
 - **Full cost:** what Jev charges is included in the cost per correct answer.
 - **No blind dependency:** if Jev doesn't answer within the timeout, the rule takes over and the gateway keeps running.
 - **Result published either way**, including if Jev loses.
@@ -77,8 +78,8 @@ Decision record (Portuguese): [docs/adr/0004-jev-como-politica-plugavel.md](docs
 | Cheapest model alone | — | — | — | — |
 | Best single model | — | — | — | — |
 | OpenRouter Auto (`openrouter/auto`) | — | — | — | — |
+| Jev Router (`typesafe/jev-router`) | — | — | — | — |
 | Ladder with rule | — | — | — | — |
-| Ladder with Jev | — | — | — | — |
 | Learned router | — | — | — | — |
 | Oracle (theoretical bound) | — | — | — | — |
 

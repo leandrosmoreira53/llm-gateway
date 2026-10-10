@@ -8,7 +8,7 @@ As datas são uma proposta e devem ser revisadas na revisão de cada sprint.
 | Fase | Objetivo | Sprints | Release | Data alvo |
 |---|---|---|---|---|
 | **Sprint 0** | Planejamento, documentação, repositório | S0 | — | 11/10/2026 |
-| **V0 — Benchmark** | Saber, com dado, se rotear vale a pena antes de construir (inclui o Jev simulado) | S1–S2 | `v0.1.0` | 25/10/2026 |
+| **V0 — Benchmark** | Saber, com dado, se rotear vale a pena antes de construir (13 modelos, OpenRouter Auto e Jev Router) | S1–S2 | `v0.1.0` | 25/10/2026 |
 | **V1 — Gateway funcional** | API compatível com OpenAI, regra fixa, registro, painel simples | S3–S4 | `v0.2.0` | 08/11/2026 |
 | **V2 — Escada e resiliência** | Escada com checagem, cache, orçamento, rate limit, Jev, caos, deploy | S5–S6 | `v0.3.0` | 22/11/2026 |
 | **V3 — Aprende + observabilidade** | Router aprendido, feedback, Prometheus, OpenTelemetry | S7–S8 | `v1.0.0` | 06/12/2026 |
@@ -52,7 +52,6 @@ gantt
 | Repositório `llm-gateway` criado e com acesso | até 11/10 | Leandro |
 | Chave do OpenRouter com crédito (~US$ 10) | até 18/10 | Leandro |
 | Caminho do gabarito do iRacingEng (58 perguntas) | até 18/10 | Leandro |
-| Chave da TypeSafe (`TYPESAFE_API_KEY`) para o teste do Jev | até 18/10 | Leandro |
 | Primeiro resultado do Jev (para o post no LinkedIn) | 25/10 | Fim da S2 |
 | Revisão humana de 10 respostas por modelo | S2 | Leandro (~1 h) |
 | Checkpoint do iRacingEng | 02–08/11 | Coincide com S4: teste do iRacingEng no gateway só **local** |
@@ -63,7 +62,7 @@ gantt
 | Métrica | Como mede | Meta |
 |---|---|---|
 | Custo por resposta correta | Benchmark no conjunto de teste | Menor que Sonnet 5.5 sozinho, com acerto no máximo 5 pontos abaixo do melhor |
-| Comparação com o mercado | Mesma tabela, linhas `openrouter/auto` e escada com Jev | Publicar o resultado, ganhe ou perca |
+| Comparação com o mercado | Mesma tabela, linhas `openrouter/auto` e Jev Router | Publicar o resultado, ganhe ou perca |
 | Sobrecarga do gateway | k6 com upstream simulado | Meta inicial p95 < 50 ms (revisar após a 1ª medição) |
 | Resiliência | Testes de caos | Gateway responde com Redis fora e com Postgres fora |
 | Qualidade de código | CI | ruff + mypy limpos, testes verdes em todo merge |

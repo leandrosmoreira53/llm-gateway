@@ -18,5 +18,4 @@ class Settings(BaseSettings):
     http_connect_timeout_seconds: float = Field(default=10.0, gt=0)
     http_timeout_seconds: float = Field(default=120.0, gt=0)
 
-    typesafe_api_key: SecretStr | None = None
     bench_dataset_path: Path | None = None
