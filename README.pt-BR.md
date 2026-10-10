@@ -4,7 +4,7 @@
 
 > Gateway de LLM compatível com a API da OpenAI que escolhe o modelo pelo **custo por resposta correta**
 > e publica, com benchmark reproduzível, quanto economiza (e onde não economiza).
-> Compara 15 modelos (fechados e open source, incluindo Qwen) e dois routers de mercado, **Jev Router** e
+> Compara 13 modelos (fechados e open source, incluindo Qwen) e dois routers de mercado, **Jev Router** e
 > OpenRouter Auto, no mesmo conjunto de teste congelado.
 
 **Status:** planejamento concluído · Sprint 0 · próxima entrega: `v0.1.0` (benchmark), fim de 25/10/2026.
@@ -61,7 +61,7 @@ O Jev está em alta. Aqui ele não é tratado como cérebro do gateway, e sim co
 provar valor com números:
 
 - **Primeiro resultado já na `v0.1.0`**; integração como política do gateway na V2.
-- **Mesmo teste, mesma regra de decisão:** Jev Router × OpenRouter Auto × escada deste gateway × 15 modelos
+- **Mesmo teste, mesma regra de decisão:** Jev Router × OpenRouter Auto × escada deste gateway × 13 modelos
   sozinhos, no conjunto de teste congelado.
 - **Custo completo:** o que se paga ao Jev entra no custo por resposta correta.
 - **Sem dependência cega:** se o Jev não responder no tempo-limite, a regra assume, e o gateway não para.

@@ -74,6 +74,6 @@ O backup é restaurado num container local uma vez antes do primeiro deploy, par
 |---|---|
 | VPS | Já existente |
 | OpenRouter | Por uso; teto pelo orçamento por app; taxa de ~5,5% sobre créditos |
-| Benchmark V0 | ~US$ 4 pelos preços do catálogo (teto US$ 8) |
+| Benchmark V0 | ~US$ 6 medido no teste rápido (teto US$ 8) |
 | Jev | Pelo OpenRouter (`typesafe/jev-router`), mesma chave; custo por chamada registrado |
 | GitHub Actions e GHCR | Gratuito para repositório público |
